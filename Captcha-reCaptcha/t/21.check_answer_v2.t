@@ -19,6 +19,7 @@ ok $@ =~ /To use reCAPTCHA you must get an API key from/, "Breaks on no argument
 eval { $captcha->check_answer_v2( PRIVKEY ) };
 ok $@ =~ /To check answer, the user response token must be provided/, "Breaks on no response arg";
 
+$captcha->set_response("\"success\": false");
 my $result = eval { $captcha->check_answer_v2( PRIVKEY, 'fakeresponse' ) };
 ok $result->{is_valid} eq '0', "Google Say's the response is invalid";
 

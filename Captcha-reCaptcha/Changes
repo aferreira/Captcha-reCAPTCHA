@@ -60,3 +60,5 @@ Revision history for Captcha-reCAPTCHA
         Thanks to Bill Moseley (HANK) for the spot
 0.98    2016-07-14
         Implemented Version 2 of the new API along side existing one
+0.99    2016-09-15
+       	Fixed issues identified with security and test warnings 

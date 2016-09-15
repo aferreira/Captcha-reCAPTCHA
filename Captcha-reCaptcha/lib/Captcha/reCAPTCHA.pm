@@ -6,7 +6,7 @@ use Carp;
 use LWP::UserAgent;
 use HTML::Tiny;
 
-our $VERSION = '0.98';
+our $VERSION = '0.99';
 
 use constant API_SERVER => 'http://www.google.com/recaptcha/api';
 use constant API_SECURE_SERVER =>
@@ -22,7 +22,7 @@ Captcha::reCAPTCHA - A Perl implementation of the reCAPTCHA API
 
 =head1 VERSION
 
-This document describes Captcha::reCAPTCHA version 0.98
+This document describes Captcha::reCAPTCHA version 0.99
 
 =head1 NOTICE
 
@@ -392,6 +392,9 @@ The value of the form field recaptcha_response_field.
 Returns a reference to a hash containing two fields: C<is_valid>
 and C<error>.
 
+	# If your site does not use SSL then
+	$ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
+
     my $result = $c->check_answer_v2(
         'your private key here', $response,
         $ENV{'REMOTE_ADDR'}
@@ -430,9 +433,6 @@ sub check_answer_v2 {
       unless $privkey;
 
     croak "To check answer, the user response token must be provided" unless $response;
-
-    # For sites that don't use SSL
-    $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
 
     my $request = {
       secret => $privkey,

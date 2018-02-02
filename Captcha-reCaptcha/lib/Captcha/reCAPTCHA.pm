@@ -115,6 +115,8 @@ sub _initialize {
 
   croak "new must be called with a reference to a hash of parameters"
    unless 'HASH' eq ref $args;
+
+  $self->{_v2} = $args->{v2} if %{ $args->{v2} || {} };
 }
 
 sub _html { shift->{_html} ||= HTML::Tiny->new }
@@ -248,13 +250,19 @@ sub get_html_v2 {
    "To use reCAPTCHA you must get an API key from https://www.google.com/recaptcha/admin/create"
    unless $pubkey;
 
-  my $h = $self->_html;
+  my $url = $self->_api_v2_url;
 
   # Use new version by default
   return join('',
-    '<script src="https://www.google.com/recaptcha/api.js" async defer></script>',
+    qq{<script src="$url" async defer></script>},
     $self->get_options_setter_div( $pubkey, $options )
   );
+}
+
+sub _api_v2_url {
+  my $self = shift;
+  return $self->{_api_v2_url} ||= API_V2_SERVER
+    . ( $self->{_v2} ? '?' . $self->_html->query_encode( $self->{_v2} ) : '' );
 }
 
 =item C<< get_html( $pubkey, $error, $use_ssl, \%options ) >>
